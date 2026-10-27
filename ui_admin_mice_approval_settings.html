@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cài đặt Quy trình duyệt - VNTRIP Admin</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .vnt-blue { color: #1890ff; }
+    .bg-vnt-blue { background-color: #1890ff; }
+    .bg-vnt-blue:hover { background-color: #096dd9; }
+    .border-vnt-blue { border-color: #1890ff; }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-[#f0f2f5] text-slate-800 antialiased min-h-screen text-xs">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="bg-white border-b border-slate-200 px-6 py-2 flex items-center justify-between sticky top-0 z-40 shadow-2xs">
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <button class="text-slate-500 hover:text-slate-800 text-base">☰</button>
+        <div class="font-extrabold text-blue-600 text-base tracking-tight flex items-center">
+          <span>vntrip</span><span class="text-slate-400 font-normal text-xs ml-0.5">.vn</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-6 text-[13px] font-medium text-slate-600">
+        <a href="#" class="hover:text-blue-600 py-2">HBU</a>
+        <a href="#" class="hover:text-blue-600 py-2">MKT</a>
+        <a href="#" class="hover:text-blue-600 py-2">B2B</a>
+        <a href="#" class="hover:text-blue-600 py-2">B2C</a>
+        <a href="#" class="hover:text-blue-600 py-2">ACC</a>
+        <a href="#" class="hover:text-blue-600 py-2">TICKETING</a>
+        
+        <!-- MENU SETTINGS CÓ DROPDOWN (THEO ĐÚNG ẢNH 2) -->
+        <div class="relative group">
+          <button onclick="toggleSettingsDropdown()" class="text-blue-600 border-b-2 border-blue-600 font-bold py-2 flex items-center gap-1 focus:outline-none">
+            SETTINGS <span class="text-[10px] ml-0.5">▾</span>
+          </button>
+          
+          <!-- Dropdown menu matching Ảnh 2 -->
+          <div id="settings-menu-dropdown" class="absolute left-0 mt-0.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50">
+            <a href="#" class="flex items-center justify-between px-4 py-2 hover:bg-slate-50 text-slate-700 transition">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-500 text-sm">🕸️</span>
+                <span class="text-xs font-medium">Extarnet</span>
+              </div>
+              <span class="text-slate-400 text-xs">›</span>
+            </a>
+            <a href="#" class="flex items-center justify-between px-4 py-2 hover:bg-slate-50 text-slate-700 transition">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-500 text-sm">⚙️</span>
+                <span class="text-xs font-medium">OTA Admin</span>
+              </div>
+              <span class="text-slate-400 text-xs">›</span>
+            </a>
+            <a href="#" class="flex items-center gap-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 transition">
+              <span class="text-slate-500 font-bold text-xs">#</span>
+              <span class="text-xs font-medium">Danh sách custom field</span>
+            </a>
+            
+            <!-- MỤC MỚI BỔ SUNG: QUY TRÌNH DUYỆT (BẤM VÀO SẼ MỞ ẢNH 1) -->
+            <div class="border-t border-slate-100 my-1"></div>
+            <a href="javascript:void(0)" onclick="switchScreen('list')" class="flex items-center justify-between px-4 py-2.5 bg-blue-50/70 hover:bg-blue-100/70 text-blue-700 font-bold transition">
+              <div class="flex items-center gap-2.5">
+                <span class="text-blue-600 text-sm">🛡️</span>
+                <span class="text-xs">Quy trình duyệt</span>
+              </div>
+              <span class="text-xs bg-blue-600 text-white rounded px-1.5 py-0.5 text-[10px]">Mới</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="#" class="hover:text-blue-600 py-2">TOOL</a>
+      </nav>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-3">
+      <!-- Quick Switcher for Pair Review -->
+      <div class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+        <button id="btn-tab-list" onclick="switchScreen('list')" class="px-3 py-1 rounded-md text-xs font-bold transition bg-white text-blue-600 shadow-2xs">
+          📋 Màn 1: Danh sách (Ảnh 1)
+        </button>
+        <button id="btn-tab-form" onclick="switchScreen('form')" class="px-3 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+          ⚙️ Màn 2: Chỉnh sửa (Form)
+        </button>
+      </div>
+
+      <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs">
+        👤
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== BODY LAYOUT ==================== -->
+  <div class="flex">
+
+    <!-- Mini Left Sidebar -->
+    <aside class="w-12 bg-white border-r border-slate-200 min-h-[calc(100vh-45px)] py-4 flex flex-col items-center gap-5 text-slate-400">
+      <span class="cursor-pointer hover:text-blue-600 text-sm">📊</span>
+      <span class="cursor-pointer text-blue-600 text-sm">⚙️</span>
+      <span class="cursor-pointer hover:text-blue-600 text-sm">📋</span>
+      <span class="cursor-pointer hover:text-blue-600 text-sm">🏢</span>
+      <span class="cursor-pointer hover:text-blue-600 text-sm">👥</span>
+      <span class="cursor-pointer hover:text-blue-600 text-sm">🏷️</span>
+      <span class="cursor-pointer hover:text-blue-600 text-sm">📈</span>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="grow p-6 max-w-6xl mx-auto space-y-4">
+
+      <!-- ========================================================================= -->
+      <!-- MÀN HÌNH 1: DANH SÁCH QUY TRÌNH DUYỆT (THEO ĐÚNG ẢNH 1 USER GỬI)         -->
+      <!-- ========================================================================= -->
+      <div id="screen-list" class="space-y-4">
+        
+        <!-- Header: Tiêu đề + Nút Tạo mới quy trình duyệt (Xanh dương đồng bộ Admin) -->
+        <div class="flex items-center justify-between pb-1">
+          <h1 class="text-lg font-bold text-slate-900">Quy trình duyệt</h1>
+          <button onclick="switchScreen('form')" class="px-4 py-2 rounded-lg bg-[#1890ff] hover:bg-[#096dd9] text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5">
+            <span class="text-sm font-extrabold">+</span> Tạo mới quy trình duyệt
+          </button>
+        </div>
+
+        <!-- Filter Bar: 2 ô Tìm kiếm (Đã bỏ lọc Đối tượng áp dụng theo yêu cầu) -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+            
+            <!-- Ô 1: Tìm kiếm theo Tên quy trình -->
+            <div>
+              <label class="block text-slate-600 font-medium text-xs mb-1.5">Tìm kiếm</label>
+              <div class="flex">
+                <input type="text" placeholder="Tên quy trình duyệt" class="grow px-3 py-2 border border-r-0 border-slate-300 rounded-l-lg text-xs focus:outline-none focus:border-blue-500">
+                <button class="px-4 py-2 bg-[#1890ff] hover:bg-[#096dd9] text-white rounded-r-lg transition font-bold text-xs" title="Tìm kiếm">
+                  🔍
+                </button>
+              </div>
+            </div>
+
+            <!-- Ô 2: Tìm kiếm theo Người duyệt (Dạng input search) -->
+            <div>
+              <label class="block text-slate-600 font-medium text-xs mb-1.5">Tìm kiếm theo</label>
+              <div class="relative">
+                <input type="text" placeholder="Người duyệt" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 pr-8">
+                <span class="absolute right-3 top-2.5 text-slate-400 pointer-events-none text-xs">🔍</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BẢNG DANH SÁCH QUY TRÌNH DUYỆT (CHỈ CÒN ĐƠN MICE) -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold text-xs">
+                <th class="py-3 px-4 w-1/4">Tên quy trình duyệt</th>
+                <th class="py-3 px-4 w-1/4">Đối tượng áp dụng</th>
+                <th class="py-3 px-4 w-1/3">Cấu hình duyệt</th>
+                <th class="py-3 px-4 text-right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-xs">
+              
+              <!-- HÀNG DUY NHẤT: QUY TRÌNH DUYỆT NỘI BỘ ĐƠN MICE -->
+              <tr class="hover:bg-blue-50/30 transition">
+                <td class="py-3.5 px-4 font-bold text-slate-900">
+                  Quy trình duyệt nội bộ đơn Mice
+                </td>
+                <td class="py-3.5 px-4 text-slate-600">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200 text-xs">
+                    Loại đơn hàng: Mice
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 text-slate-700 space-y-1">
+                  <div>Duyệt công tác trực tiếp: 3 cấp</div>
+                  <div>Duyệt ngoài chuyến công tác: 1 cấp</div>
+                  <div>Duyệt đề nghị thanh toán: 2 cấp</div>
+                </td>
+                <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                  <button onclick="switchScreen('form')" class="text-blue-600 hover:text-blue-800 font-bold mr-3 inline-flex items-center gap-1">
+                    <span>✏️</span> Sửa
+                  </button>
+                  <button onclick="alert('Không thể xóa quy trình đang áp dụng cho đơn Mice!')" class="text-red-500 hover:text-red-700 font-bold inline-flex items-center gap-1">
+                    <span>🗑️</span> Xóa
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- MÀN HÌNH 2: CHỈNH SỬA / TẠO MỚI QUY TRÌNH DUYỆT (KÈM RULE VALIDATE CHẶN LƯU) -->
+      <!-- ========================================================================= -->
+      <div id="screen-form" class="space-y-4 hidden">
+
+        <!-- Page Title & Navigation Back -->
+        <div class="flex items-center justify-between pb-2">
+          <div class="flex items-center gap-2">
+            <button onclick="switchScreen('list')" class="text-slate-600 hover:text-slate-900 font-bold text-base px-2 py-0.5 rounded hover:bg-slate-200 transition" title="Quay lại danh sách">
+              ‹
+            </button>
+            <h1 class="text-base font-bold text-slate-900">Chỉnh sửa quy trình duyệt</h1>
+          </div>
+          <div class="text-[11px] text-slate-500 bg-blue-50 border border-blue-100 px-3 py-1 rounded-lg">
+            🛡️ <span class="font-bold text-blue-700">Rule mới:</span> Cấp duyệt nào thêm mới mà chưa chọn người duyệt sẽ bị <span class="font-bold text-red-600">chặn lưu và báo lỗi</span>!
+          </div>
+        </div>
+
+        <!-- BANNER CẢNH BÁO LỖI KHI BỊ CHẶN LƯU (MẶC ĐỊNH ẨN) -->
+        <div id="save-error-banner" class="hidden p-4 rounded-xl bg-red-50 border border-red-300 text-red-800 shadow-sm space-y-1">
+          <div class="flex items-center gap-2 font-bold text-xs">
+            <span class="text-base">⚠️</span> KHÔNG THỂ LƯU CẤU HÌNH!
+          </div>
+          <div id="save-error-message" class="text-xs text-red-700 pl-6">
+            Phát hiện cấp duyệt chưa được thiết lập người duyệt. Vui lòng hoàn tất cấu hình hoặc xóa cấp duyệt chưa thiết lập trước khi lưu.
+          </div>
+        </div>
+
+        <!-- ==================== KHỐI 1: THÔNG TIN QUY TRÌNH & ĐỐI TƯỢNG ÁP DỤNG ==================== -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs space-y-4">
+          <div>
+            <label class="font-bold text-slate-700 text-xs block mb-1.5">Tên quy trình duyệt</label>
+            <input type="text" value="Quy trình duyệt nội bộ đơn Mice" class="w-full max-w-xl p-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500">
+          </div>
+
+          <!-- Đối tượng áp dụng -->
+          <div class="pt-3 border-t border-slate-100 space-y-2.5">
+            <div class="font-bold text-slate-800 text-xs">Đối tượng áp dụng</div>
+            
+            <div class="flex justify-between items-center py-1">
+              <span class="text-slate-700">Loại đơn hàng được áp dụng quy trình duyệt (1)</span>
+              <button class="text-blue-600 hover:underline font-semibold flex items-center gap-1">
+                <span>+</span> Thêm loại đơn hàng
+              </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-semibold text-xs">
+                Mice
+                <button class="text-blue-500 hover:text-blue-800 font-bold text-sm leading-none ml-1">×</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== KHỐI 2: DUYỆT CHUYẾN CÔNG TÁC ==================== -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs space-y-4 transition-all duration-200" id="card-block1">
+          
+          <div class="flex items-center justify-between" id="header-block1">
+            <div>
+              <div class="font-bold text-sm text-slate-900">Duyệt chuyến công tác</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Duyệt chuyến công tác từ đặt trực tiếp hoặc từ đề xuất công tác</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Switch Bật/Tắt chuẩn Admin (Theo đúng ảnh user gửi) -->
+              <button type="button" 
+                      role="switch" 
+                      id="switch-btn-block1" 
+                      onclick="toggleApprovalBlock('block1')" 
+                      class="relative inline-flex items-center h-6 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none bg-[#1890ff]"
+                      title="Bấm để Bật/Tắt khối duyệt này">
+                <span id="switch-label-block1" class="text-[10px] font-bold text-white select-none absolute left-2 pointer-events-none transition-all">Bật</span>
+                <span id="switch-knob-block1" class="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out translate-x-9 pointer-events-none"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- THÂN CẤU HÌNH (TỰ ĐỘNG ĐÓNG HOÀN TOÀN KHI SWITCH = TẮT) -->
+          <div id="body-block1" class="space-y-4 pt-3 border-t border-slate-100">
+            <!-- Cấu hình người duyệt -->
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-slate-700 text-xs flex items-center gap-1">⚙️ Cấu hình người duyệt</span>
+                <button onclick="addNewApprovalStep('block1')" class="text-blue-600 hover:underline text-xs font-semibold flex items-center gap-1">
+                  <span>+</span> Thêm cấp duyệt
+                </button>
+              </div>
+
+              <!-- Danh sách cấp duyệt khối 1 -->
+              <div id="steps-container-block1" class="space-y-3 pt-1">
+
+                <!-- CẤP 1 (Đã setting: Leader MICE) -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 1</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(1, 'block1')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">HT</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">HOÀNG TRUNG HÀ</div>
+                        <div class="text-[11px] text-slate-500">ha.t.trung@vntrip.vn | 0983xxxxxx</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CẤP 2 (Đã setting: Kế toán) -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 2</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(2, 'block1')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-xs">AC</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">NGUYỄN THỊ MAI</div>
+                        <div class="text-[11px] text-slate-500">mai.th.nguyen@vntrip.vn</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CẤP 3 (Đã setting: Giám đốc) -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 3</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(3, 'block1')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">ML</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">MAI THỊ LAN</div>
+                        <div class="text-[11px] text-slate-500">lan.t.mai@vntrip.vn</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CẤP 4: DEMO TRẠNG THÁI CHƯA SETTING (ĐỂ THỬ NGHIỆM RULE CHẶN LƯU) -->
+                <div id="demo-step-4" class="border border-slate-200 rounded-xl p-3.5 bg-white space-y-3 step-item transition">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span class="step-title">Cấp duyệt 4</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pt-1 flex items-center justify-between">
+                    <button onclick="openApproverModal(4, 'block1')" class="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-blue-600 font-semibold text-xs inline-flex items-center gap-1.5 transition shadow-2xs">
+                      <span>+</span> Thêm người duyệt
+                    </button>
+                    <span class="text-[11px] text-amber-600 font-medium">⚠️ Chưa thiết lập người duyệt</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Gửi thông báo (Khối 1: Duyệt chuyến công tác) -->
+              <div class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex justify-between items-center relative">
+                  <span class="font-bold text-slate-700 text-xs flex items-center gap-1.5">
+                    <span>⚙️</span> Gửi thông báo
+                  </span>
+                  
+                  <!-- Relative container for Button + Popover (Khớp Ảnh 1) -->
+                  <div class="relative">
+                    <button type="button" 
+                            onclick="toggleNotificationPopover('block1')" 
+                            class="text-blue-600 hover:text-blue-800 text-xs font-semibold flex items-center gap-1 transition">
+                      <span>+</span> Thêm
+                    </button>
+
+                    <!-- Popover (Khớp 100% Ảnh 1: 3 sự kiện Chuyến công tác, đã bỏ 'vượt chính sách') -->
+                    <div id="popover-block1" class="absolute right-0 bottom-full mb-2 w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 z-30 hidden space-y-3">
+                      <div class="font-bold text-xs text-slate-800 pb-1.5 border-b border-slate-100">Chọn sự kiện gửi thông báo</div>
+                      <div class="space-y-2.5 text-xs text-slate-800" id="options-block1">
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Chuyến công tác cần phê duyệt" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Chuyến công tác cần phê duyệt</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Chuyến công tác duyệt thành công" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Chuyến công tác duyệt thành công</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Chuyến công tác bị từ chối" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Chuyến công tác bị từ chối</span>
+                        </label>
+                      </div>
+                      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                        <button type="button" onclick="closeNotificationPopover('block1')" class="px-3.5 py-1 rounded-full border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-xs font-medium transition">
+                          Hủy
+                        </button>
+                        <button type="button" onclick="confirmAddNotifications('block1')" class="px-4 py-1 rounded-full bg-[#1890ff] hover:bg-[#096dd9] text-white text-xs font-bold transition shadow-xs">
+                          Thêm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Danh sách card thông báo đã thêm (Ban đầu để trống, bấm + Thêm mới hiển thị ra) -->
+                <div id="notifications-container-block1" class="space-y-3"></div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== KHỐI 3: DUYỆT NGOÀI CHUYẾN CÔNG TÁC (OUT-OF-PLAN) ==================== -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs space-y-4 transition-all duration-200" id="card-block2">
+          
+          <div class="flex items-center justify-between" id="header-block2">
+            <div>
+              <div class="font-bold text-sm text-slate-900">Duyệt ngoài chuyến công tác</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Duyệt đơn hàng phát sinh ngoài chuyến công tác</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Switch Bật/Tắt chuẩn Admin -->
+              <button type="button" 
+                      role="switch" 
+                      id="switch-btn-block2" 
+                      onclick="toggleApprovalBlock('block2')" 
+                      class="relative inline-flex items-center h-6 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none bg-[#1890ff]"
+                      title="Bấm để Bật/Tắt khối duyệt này">
+                <span id="switch-label-block2" class="text-[10px] font-bold text-white select-none absolute left-2 pointer-events-none transition-all">Bật</span>
+                <span id="switch-knob-block2" class="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out translate-x-9 pointer-events-none"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- THÂN CẤU HÌNH KHỐI 2 (TỰ ĐỘNG ĐÓNG KHI SWITCH = TẮT) -->
+          <div id="body-block2" class="space-y-4 pt-3 border-t border-slate-100">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-slate-700 text-xs flex items-center gap-1">⚙️ Cấu hình người duyệt</span>
+                <button onclick="addNewApprovalStep('block2')" class="text-blue-600 hover:underline text-xs font-semibold flex items-center gap-1">
+                  <span>+</span> Thêm cấp duyệt
+                </button>
+              </div>
+
+              <div id="steps-container-block2" class="space-y-3 pt-1">
+                <!-- CẤP 1 -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 1</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(1, 'block2')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">HT</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">HOÀNG TRUNG HÀ</div>
+                        <div class="text-[11px] text-slate-500">ha.t.trung@vntrip.vn | 0983xxxxxx</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gửi thông báo (Khối 2: Duyệt đơn hàng ngoài chuyến công tác) -->
+              <div class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex justify-between items-center relative">
+                  <span class="font-bold text-slate-700 text-xs flex items-center gap-1.5">
+                    <span>⚙️</span> Gửi thông báo
+                  </span>
+                  
+                  <div class="relative">
+                    <button type="button" 
+                            onclick="toggleNotificationPopover('block2')" 
+                            class="text-blue-600 hover:text-blue-800 text-xs font-semibold flex items-center gap-1 transition">
+                      <span>+</span> Thêm
+                    </button>
+
+                    <!-- Popover (3 sự kiện Đơn hàng theo yêu cầu user) -->
+                    <div id="popover-block2" class="absolute right-0 bottom-full mb-2 w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 z-30 hidden space-y-3">
+                      <div class="font-bold text-xs text-slate-800 pb-1.5 border-b border-slate-100">Chọn sự kiện gửi thông báo</div>
+                      <div class="space-y-2.5 text-xs text-slate-800" id="options-block2">
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đơn hàng cần phê duyệt" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đơn hàng cần phê duyệt</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đơn hàng duyệt thành công" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đơn hàng duyệt thành công</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đơn hàng bị từ chối" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đơn hàng bị từ chối</span>
+                        </label>
+                      </div>
+                      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                        <button type="button" onclick="closeNotificationPopover('block2')" class="px-3.5 py-1 rounded-full border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-xs font-medium transition">
+                          Hủy
+                        </button>
+                        <button type="button" onclick="confirmAddNotifications('block2')" class="px-4 py-1 rounded-full bg-[#1890ff] hover:bg-[#096dd9] text-white text-xs font-bold transition shadow-xs">
+                          Thêm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Container danh sách card thông báo Khối 2 -->
+                <div id="notifications-container-block2" class="space-y-3"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== KHỐI 4: DUYỆT ĐỀ NGHỊ THANH TOÁN ==================== -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs space-y-4 transition-all duration-200" id="card-block3">
+          
+          <div class="flex items-center justify-between" id="header-block3">
+            <div>
+              <div class="font-bold text-sm text-slate-900">Duyệt đề nghị thanh toán</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Duyệt đề nghị thanh toán (DNTT) cho đơn hàng MICE</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Switch Bật/Tắt chuẩn Admin -->
+              <button type="button" 
+                      role="switch" 
+                      id="switch-btn-block3" 
+                      onclick="toggleApprovalBlock('block3')" 
+                      class="relative inline-flex items-center h-6 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none bg-[#1890ff]"
+                      title="Bấm để Bật/Tắt khối duyệt này">
+                <span id="switch-label-block3" class="text-[10px] font-bold text-white select-none absolute left-2 pointer-events-none transition-all">Bật</span>
+                <span id="switch-knob-block3" class="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out translate-x-9 pointer-events-none"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- THÂN CẤU HÌNH KHỐI 3 (TỰ ĐỘNG ĐÓNG KHI SWITCH = TẮT) -->
+          <div id="body-block3" class="space-y-4 pt-3 border-t border-slate-100">
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-slate-700 text-xs flex items-center gap-1">⚙️ Cấu hình người duyệt</span>
+                <button onclick="addNewApprovalStep('block3')" class="text-blue-600 hover:underline text-xs font-semibold flex items-center gap-1">
+                  <span>+</span> Thêm cấp duyệt
+                </button>
+              </div>
+
+              <div id="steps-container-block3" class="space-y-3 pt-1">
+                <!-- CẤP 1 -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 1</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(1, 'block3')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">HT</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">HOÀNG TRUNG HÀ</div>
+                        <div class="text-[11px] text-slate-500">ha.t.trung@vntrip.vn | 0983xxxxxx</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CẤP 2 -->
+                <div class="border border-slate-200 rounded-xl p-3 bg-white space-y-2 step-item">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+                    <span>Cấp duyệt 2</span>
+                    <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+                  </div>
+                  <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+                    <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                      <button onclick="openApproverModal(2, 'block3')" class="text-slate-400 hover:text-blue-600">✏️</button>
+                      <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600">🗑️</button>
+                    </div>
+                    <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                      <div class="w-7 h-7 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-xs">AC</div>
+                      <div>
+                        <div class="font-bold text-slate-900 text-xs">BAN KẾ TOÁN THANH TOÁN</div>
+                        <div class="text-[11px] text-slate-500">acc.payment@vntrip.vn</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gửi thông báo (Khối 3: Duyệt ĐNTT theo yêu cầu user) -->
+              <div class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex justify-between items-center relative">
+                  <span class="font-bold text-slate-700 text-xs flex items-center gap-1.5">
+                    <span>⚙️</span> Gửi thông báo
+                  </span>
+                  
+                  <div class="relative">
+                    <button type="button" 
+                            onclick="toggleNotificationPopover('block3')" 
+                            class="text-blue-600 hover:text-blue-800 text-xs font-semibold flex items-center gap-1 transition">
+                      <span>+</span> Thêm
+                    </button>
+
+                    <!-- Popover (3 sự kiện Đề nghị thanh toán theo yêu cầu user) -->
+                    <div id="popover-block3" class="absolute right-0 bottom-full mb-2 w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 z-30 hidden space-y-3">
+                      <div class="font-bold text-xs text-slate-800 pb-1.5 border-b border-slate-100">Chọn sự kiện gửi thông báo</div>
+                      <div class="space-y-2.5 text-xs text-slate-800" id="options-block3">
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đề nghị thanh toán cần phê duyệt" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đề nghị thanh toán cần phê duyệt</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đề nghị thanh toán duyệt thành công" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đề nghị thanh toán duyệt thành công</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer hover:text-blue-600">
+                          <input type="checkbox" value="Đề nghị thanh toán bị từ chối" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                          <span>Đề nghị thanh toán bị từ chối</span>
+                        </label>
+                      </div>
+                      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                        <button type="button" onclick="closeNotificationPopover('block3')" class="px-3.5 py-1 rounded-full border border-slate-300 text-slate-600 bg-white hover:bg-slate-50 text-xs font-medium transition">
+                          Hủy
+                        </button>
+                        <button type="button" onclick="confirmAddNotifications('block3')" class="px-4 py-1 rounded-full bg-[#1890ff] hover:bg-[#096dd9] text-white text-xs font-bold transition shadow-xs">
+                          Thêm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Container danh sách card thông báo Khối 3 -->
+                <div id="notifications-container-block3" class="space-y-3"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== FOOTER BUTTONS ==================== -->
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-200">
+          <button onclick="switchScreen('list')" class="px-6 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-bold text-xs transition">
+            Hủy
+          </button>
+          <button onclick="handleSaveConfiguration()" class="px-6 py-2 rounded-lg bg-[#1890ff] hover:bg-[#096dd9] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+            <span>💾</span> Lưu cấu hình
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODAL POPUP: THÊM NGƯỜI DUYỆT (MATCHING 100% ẢNH TMS) ==================== -->
+  <div id="approver-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs transition-opacity duration-200 hidden">
+    
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-6 relative border border-slate-100 transform transition-transform duration-200 scale-95" id="modal-card">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3">
+        <h3 class="text-base font-bold text-slate-900">Thêm người duyệt</h3>
+        <button onclick="closeApproverModal()" class="text-slate-400 hover:text-slate-600 text-lg leading-none p-1">
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="space-y-4 pt-1">
+        
+        <!-- BƯỚC 1: Dropdown Hình thức duyệt (Đầu tiên chỉ mở ra mỗi ô này với placeholder 'Chọn') -->
+        <div class="relative">
+          <button type="button" onclick="toggleApprovalTypeDropdown()" id="approval-type-btn" class="w-full flex items-center justify-between px-3.5 py-2.5 bg-white border border-blue-400 ring-2 ring-blue-50 rounded-xl text-left text-xs font-medium text-slate-800 transition focus:outline-none">
+            <span id="selected-type-text" class="text-slate-400">Chọn</span>
+            <span class="text-slate-400 text-xs">∨</span>
+          </button>
+
+          <!-- Dropdown List Options (Chỉ định & Tự động duyệt) -->
+          <div id="approval-type-dropdown" class="absolute left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 py-1.5 hidden">
+            <div onclick="selectApprovalType('assigned')" class="px-3.5 py-2 hover:bg-slate-100 cursor-pointer text-xs font-medium text-slate-800 flex items-center justify-between">
+              <span>Chỉ định</span>
+              <span id="check-assigned" class="text-blue-600 font-bold hidden">✓</span>
+            </div>
+            <div onclick="selectApprovalType('auto')" class="px-3.5 py-2 hover:bg-slate-100 cursor-pointer text-xs font-medium text-slate-800 flex items-center justify-between">
+              <span>Tự động duyệt</span>
+              <span id="check-auto" class="text-blue-600 font-bold hidden">✓</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BƯỚC 2: KHỐI CHỌN NGƯỜI (CHỈ MỞ RA KHI CHỌN 'CHỈ ĐỊNH') -->
+        <div id="assigned-user-block" class="space-y-2 hidden">
+          
+          <div class="relative">
+            <input type="text" id="user-search-input" oninput="filterUsers()" placeholder="Tìm kiếm theo tên, email, số điện thoại" class="w-full pl-3.5 pr-9 py-2.5 bg-white border border-blue-400 ring-2 ring-blue-50 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500">
+            <span class="absolute right-3 top-2.5 text-slate-400 text-sm pointer-events-none">🔍</span>
+          </div>
+
+          <!-- Danh sách gợi ý User -->
+          <div id="user-list" class="border border-slate-200 rounded-xl bg-white max-h-52 overflow-y-auto divide-y divide-slate-100 shadow-xs">
+            
+            <div onclick="chooseUser('Đinh Duy Thành', 'thanh.d.dinh@vntrip.vn', '0936702996', 'ĐD')" class="user-item p-2.5 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shrink-0">
+                ĐD
+              </div>
+              <div class="grow min-w-0">
+                <div class="font-bold text-slate-800 text-xs truncate">Đinh Duy Thành</div>
+                <div class="text-[11px] text-slate-400 truncate">thanh.d.dinh@vntrip.vn | 0936702996</div>
+              </div>
+            </div>
+
+            <div onclick="chooseUser('Hi Vân Thanh', 'hvt@yopmail.com', '0987679876', 'HV')" class="user-item p-2.5 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shrink-0">
+                HV
+              </div>
+              <div class="grow min-w-0">
+                <div class="font-bold text-slate-800 text-xs truncate">Hi Vân Thanh</div>
+                <div class="text-[11px] text-slate-400 truncate">hvt@yopmail.com | 0987679876</div>
+              </div>
+            </div>
+
+            <div onclick="chooseUser('LE TRUNG THANH THANH', 'booker@yopmail.com', '0397586210', 'LT')" class="user-item p-2.5 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center shrink-0">
+                LT
+              </div>
+              <div class="grow min-w-0">
+                <div class="font-bold text-slate-800 text-xs truncate">LE TRUNG THANH THANH</div>
+                <div class="text-[11px] text-slate-400 truncate">booker@yopmail.com | 0397586210</div>
+              </div>
+            </div>
+
+            <div onclick="chooseUser('HOÀNG TRUNG HÀ', 'ha.t.trung@vntrip.vn', '0983xxxxxx', 'HT')" class="user-item p-2.5 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center shrink-0">
+                HT
+              </div>
+              <div class="grow min-w-0">
+                <div class="font-bold text-slate-800 text-xs truncate">HOÀNG TRUNG HÀ (Leader MICE)</div>
+                <div class="text-[11px] text-slate-400 truncate">ha.t.trung@vntrip.vn | 0983xxxxxx</div>
+              </div>
+            </div>
+
+            <div onclick="chooseUser('MAI THỊ LAN', 'lan.t.mai@vntrip.vn', '0904xxxxxx', 'ML')" class="user-item p-2.5 flex items-center gap-3 hover:bg-slate-50 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center shrink-0">
+                ML
+              </div>
+              <div class="grow min-w-0">
+                <div class="font-bold text-slate-800 text-xs truncate">MAI THỊ LAN (Giám đốc)</div>
+                <div class="text-[11px] text-slate-400 truncate">lan.t.mai@vntrip.vn | 0904xxxxxx</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- HIỂN THỊ NGƯỜI ĐÃ CHỌN CÓ NÚT XÓA -->
+          <div id="selected-user-preview" class="p-2.5 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between hidden">
+            <div class="flex items-center gap-2.5">
+              <div id="prev-avatar" class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center">ĐD</div>
+              <div>
+                <div id="prev-name" class="font-bold text-slate-900 text-xs">Đinh Duy Thành</div>
+                <div id="prev-sub" class="text-[10px] text-slate-500">thanh.d.dinh@vntrip.vn | 0936702996</div>
+              </div>
+            </div>
+            <button type="button" onclick="clearSelectedUser()" class="px-2.5 py-1 rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 text-xs font-semibold flex items-center gap-1 transition shadow-2xs">
+              <span>✕</span> Xóa
+            </button>
+          </div>
+
+        </div>
+
+        <!-- BƯỚC 2 (PHỤ): KHI CHỌN "TỰ ĐỘNG DUYỆT" -->
+        <div id="auto-approval-block" class="hidden p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-center space-y-1">
+          <div class="text-sm">⚡</div>
+          <div class="font-bold text-slate-800 text-xs">Tự động duyệt cấp này</div>
+          <div class="text-[11px] text-slate-500">Hệ thống sẽ tự động duyệt qua cấp này và chuyển tiếp mà không cần chỉ định người duyệt.</div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer: Nút Xác nhận xanh Admin -->
+      <div class="flex items-center justify-end gap-3 pt-5 mt-4 border-t border-slate-100">
+        <button type="button" onclick="closeApproverModal()" class="px-5 py-1.5 rounded-full border border-slate-300 text-slate-700 bg-white font-medium hover:bg-slate-50 transition text-xs">
+          Huỷ
+        </button>
+        <button type="button" onclick="confirmApproverSelection()" class="px-6 py-1.5 rounded-full bg-[#1890ff] hover:bg-[#096dd9] text-white font-medium transition text-xs shadow-xs">
+          Xác nhận
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // State quản lý màn hình và modal
+    let currentStepNumber = 4;
+    let currentBlockId = 'block1';
+    let currentApprovalType = null;
+    let selectedUser = null;
+
+    // State quản lý Bật/Tắt của 3 khối duyệt (Khối 2: block1, Khối 3: block2, Khối 4: block3)
+    const blockState = {
+      block1: true,
+      block2: true,
+      block3: true
+    };
+
+    // Hàm Toggle Bật / Tắt Khối duyệt (Theo đúng ảnh user gửi: Tắt thì đóng hoàn toàn cả khối đó)
+    function toggleApprovalBlock(blockId) {
+      blockState[blockId] = !blockState[blockId];
+      const isOn = blockState[blockId];
+
+      const btn = document.getElementById(`switch-btn-${blockId}`);
+      const label = document.getElementById(`switch-label-${blockId}`);
+      const knob = document.getElementById(`switch-knob-${blockId}`);
+      const body = document.getElementById(`body-${blockId}`);
+      const card = document.getElementById(`card-${blockId}`);
+
+      if (isOn) {
+        // TRẠNG THÁI BẬT: Switch nền xanh, knob bên phải, nhãn "Bật", mở rộng toàn bộ thân card
+        btn.className = "relative inline-flex items-center h-6 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none bg-[#1890ff]";
+        label.innerText = "Bật";
+        label.className = "text-[10px] font-bold text-white select-none absolute left-2 pointer-events-none transition-all";
+        knob.className = "inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out translate-x-9 pointer-events-none";
+        body.classList.remove('hidden');
+        card.classList.remove('bg-slate-50/50');
+      } else {
+        // TRẠNG THÁI TẮT (THEO ĐÚNG ẢNH USER GỬI): Switch nền xám, knob bên trái, nhãn "Tắt", ĐÓNG HẾT CẢ KHỐI ĐÓ
+        btn.className = "relative inline-flex items-center h-6 w-14 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none bg-[#bfbfbf]";
+        label.innerText = "Tắt";
+        label.className = "text-[10px] font-bold text-white select-none absolute right-2 pointer-events-none transition-all";
+        knob.className = "inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ease-in-out translate-x-1 pointer-events-none";
+        body.classList.add('hidden');
+        card.classList.add('bg-slate-50/50');
+      }
+    }
+
+    // Chuyển đổi giữa Màn hình 1 (Danh sách) và Màn hình 2 (Form)
+    function switchScreen(screenName) {
+      const screenList = document.getElementById('screen-list');
+      const screenForm = document.getElementById('screen-form');
+      const btnTabList = document.getElementById('btn-tab-list');
+      const btnTabForm = document.getElementById('btn-tab-form');
+      const settingsMenu = document.getElementById('settings-menu-dropdown');
+
+      // Ẩn menu dropdown nếu đang mở
+      if (settingsMenu) settingsMenu.classList.add('hidden');
+
+      if (screenName === 'list') {
+        screenList.classList.remove('hidden');
+        screenForm.classList.add('hidden');
+        btnTabList.className = 'px-3 py-1 rounded-md text-xs font-bold transition bg-white text-blue-600 shadow-2xs';
+        btnTabForm.className = 'px-3 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+      } else {
+        screenList.classList.add('hidden');
+        screenForm.classList.remove('hidden');
+        btnTabList.className = 'px-3 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition';
+        btnTabForm.className = 'px-3 py-1 rounded-md text-xs font-bold transition bg-white text-blue-600 shadow-2xs';
+        
+        // Cuộn lên đầu trang
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // Toggle menu SETTINGS trên navbar
+    function toggleSettingsDropdown() {
+      const menu = document.getElementById('settings-menu-dropdown');
+      menu.classList.toggle('hidden');
+    }
+
+    // RULE QUAN TRỌNG: NẾU THÊM CẤP DUYỆT NHƯNG CHƯA SETTING THÌ CHẶN LƯU VÀ BÁO LỖI
+    // Lưu ý: Nếu một khối đang ở trạng thái TẮT (switch = false), các cấp bên trong khối đó được bỏ qua không chặn lưu!
+    function handleSaveConfiguration() {
+      const errorBanner = document.getElementById('save-error-banner');
+      const errorMsg = document.getElementById('save-error-message');
+      
+      // Xóa các highlight đỏ cũ nếu có
+      document.querySelectorAll('.step-item').forEach(el => {
+        el.classList.remove('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/20');
+      });
+
+      const unconfiguredSteps = [];
+
+      ['block1', 'block2', 'block3'].forEach(blockId => {
+        // Nếu khối đang TẮT thì không cần validate các cấp duyệt bên trong
+        if (!blockState[blockId]) return;
+
+        const container = document.getElementById(`steps-container-${blockId}`);
+        if (!container) return;
+
+        const stepItems = container.querySelectorAll('.step-item');
+        stepItems.forEach(step => {
+          const hasAddApproverBtn = step.querySelector('button[onclick*="openApproverModal"]');
+          const textContent = step.innerText;
+          const isAssigned = textContent.includes('Chỉ định') || textContent.includes('Tự động duyệt');
+
+          if (hasAddApproverBtn && !isAssigned) {
+            const title = step.querySelector('span') ? step.querySelector('span').innerText : 'Cấp duyệt';
+            const blockTitle = blockId === 'block1' ? 'Duyệt chuyến công tác' :
+                               blockId === 'block2' ? 'Duyệt ngoài chuyến công tác' :
+                               'Duyệt đề nghị thanh toán';
+            unconfiguredSteps.push({ element: step, title: `${blockTitle} (${title})` });
+          }
+        });
+      });
+
+      // NẾU CÓ CẤP DUYỆT CHƯA SETTING => CHẶN LƯU VÀ BÁO LỖI!
+      if (unconfiguredSteps.length > 0) {
+        // Highlight viền đỏ các cấp bị lỗi
+        unconfiguredSteps.forEach(item => {
+          item.element.classList.add('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/20');
+        });
+
+        const listNames = unconfiguredSteps.map(i => `[${i.title}]`).join(', ');
+        errorMsg.innerHTML = `
+          Phát hiện <b>${listNames}</b> mới được thêm vào nhưng <b>chưa thiết lập người duyệt</b>.<br/>
+          Vui lòng bấm <b>"+ Thêm người duyệt"</b> để cấu hình, hoặc bấm nút <b>"✕"</b> để xóa cấp duyệt trống, hoặc <b>Tắt công tắc</b> của khối trước khi lưu!
+        `;
+        errorBanner.classList.remove('hidden');
+
+        // Cuộn tới vị trí cấp duyệt lỗi đầu tiên
+        unconfiguredSteps[0].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Rung nhẹ cấp duyệt bị lỗi để thu hút chú ý
+        unconfiguredSteps[0].element.classList.add('animate-pulse');
+        setTimeout(() => {
+          unconfiguredSteps[0].element.classList.remove('animate-pulse');
+        }, 1500);
+
+        return false;
+      }
+
+      // NẾU TẤT CẢ ĐÃ HỢP LỆ => CHO PHÉP LƯU THÀNH CÔNG
+      errorBanner.classList.add('hidden');
+      alert('🎉 ĐÃ LƯU THÀNH CÔNG!\nCấu hình quy trình duyệt đã được cập nhật chuẩn xác trên hệ thống.');
+      switchScreen('list');
+      return true;
+    }
+
+    // Mở modal thêm người duyệt
+    function openApproverModal(stepNumber, blockId) {
+      currentStepNumber = stepNumber;
+      currentBlockId = blockId;
+      currentApprovalType = null;
+      selectedUser = null;
+
+      const typeText = document.getElementById('selected-type-text');
+      typeText.innerText = 'Chọn';
+      typeText.className = 'text-slate-400';
+
+      document.getElementById('approval-type-dropdown').classList.add('hidden');
+      document.getElementById('check-assigned').classList.add('hidden');
+      document.getElementById('check-auto').classList.add('hidden');
+
+      document.getElementById('assigned-user-block').classList.add('hidden');
+      document.getElementById('auto-approval-block').classList.add('hidden');
+      document.getElementById('selected-user-preview').classList.add('hidden');
+
+      document.getElementById('user-search-input').value = '';
+      filterUsers();
+
+      const modal = document.getElementById('approver-modal');
+      const card = document.getElementById('modal-card');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+      }, 10);
+    }
+
+    // Đóng modal
+    function closeApproverModal() {
+      const modal = document.getElementById('approver-modal');
+      const card = document.getElementById('modal-card');
+      card.classList.remove('scale-100');
+      card.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('approval-type-dropdown').classList.add('hidden');
+      }, 150);
+    }
+
+    // Bật tắt dropdown chọn loại
+    function toggleApprovalTypeDropdown() {
+      const dd = document.getElementById('approval-type-dropdown');
+      dd.classList.toggle('hidden');
+    }
+
+    // Chọn hình thức duyệt
+    function selectApprovalType(type) {
+      currentApprovalType = type;
+      const dd = document.getElementById('approval-type-dropdown');
+      const typeText = document.getElementById('selected-type-text');
+      const assignedBlock = document.getElementById('assigned-user-block');
+      const autoBlock = document.getElementById('auto-approval-block');
+      const checkAssigned = document.getElementById('check-assigned');
+      const checkAuto = document.getElementById('check-auto');
+
+      if (type === 'assigned') {
+        typeText.innerText = 'Chỉ định';
+        typeText.className = 'text-slate-800 font-semibold';
+        assignedBlock.classList.remove('hidden');
+        autoBlock.classList.add('hidden');
+        checkAssigned.classList.remove('hidden');
+        checkAuto.classList.add('hidden');
+      } else {
+        typeText.innerText = 'Tự động duyệt';
+        typeText.className = 'text-slate-800 font-semibold';
+        assignedBlock.classList.add('hidden');
+        autoBlock.classList.remove('hidden');
+        checkAssigned.classList.add('hidden');
+        checkAuto.classList.remove('hidden');
+        selectedUser = null;
+      }
+      dd.classList.add('hidden');
+    }
+
+    // Chọn người từ danh sách
+    function chooseUser(name, email, phone, initials) {
+      selectedUser = {
+        name,
+        email,
+        phone,
+        initials,
+        bgClass: initials === 'HT' ? 'bg-amber-100 text-amber-700' :
+                 initials === 'ML' ? 'bg-emerald-100 text-emerald-700' :
+                 'bg-slate-200 text-slate-700'
+      };
+
+      document.getElementById('prev-avatar').innerText = initials;
+      document.getElementById('prev-name').innerText = name;
+      document.getElementById('prev-sub').innerText = `${email} | ${phone}`;
+      document.getElementById('selected-user-preview').classList.remove('hidden');
+    }
+
+    // Xóa người đã chọn
+    function clearSelectedUser() {
+      selectedUser = null;
+      document.getElementById('selected-user-preview').classList.add('hidden');
+      document.getElementById('user-search-input').value = '';
+      filterUsers();
+    }
+
+    // Tìm kiếm user
+    function filterUsers() {
+      const q = document.getElementById('user-search-input').value.toLowerCase();
+      const items = document.querySelectorAll('.user-item');
+      items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(q)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Xác nhận gán người duyệt
+    function confirmApproverSelection() {
+      if (!currentApprovalType) {
+        alert('Vui lòng chọn hình thức phê duyệt!');
+        return;
+      }
+
+      if (currentApprovalType === 'assigned' && !selectedUser) {
+        alert('Vui lòng chọn một người duyệt từ danh sách gợi ý!');
+        return;
+      }
+
+      const container = document.getElementById(`steps-container-${currentBlockId}`);
+      if (!container) return;
+
+      let stepElement = document.getElementById(`demo-step-${currentStepNumber}`);
+      if (!stepElement && currentStepNumber) {
+        const stepDivs = container.querySelectorAll('.step-item');
+        if (stepDivs.length >= currentStepNumber) {
+          stepElement = stepDivs[currentStepNumber - 1];
+        }
+      }
+
+      if (stepElement) {
+        // Gỡ bỏ cảnh báo đỏ nếu trước đó bị lỗi
+        stepElement.classList.remove('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/20');
+
+        if (currentApprovalType === 'assigned') {
+          stepElement.innerHTML = `
+            <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+              <span>Cấp duyệt ${currentStepNumber}</span>
+              <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+              <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                <span>👤 Người duyệt: <b>Chỉ định</b></span>
+                <button onclick="openApproverModal(${currentStepNumber}, '${currentBlockId}')" class="text-slate-400 hover:text-blue-600" title="Chỉnh sửa">✏️</button>
+                <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600" title="Xóa người duyệt">🗑️</button>
+              </div>
+              <div class="flex items-center gap-2.5 p-2 bg-slate-50 rounded-lg">
+                <div class="w-7 h-7 rounded-full ${selectedUser.bgClass} flex items-center justify-center font-bold text-xs">${selectedUser.initials}</div>
+                <div>
+                  <div class="font-bold text-slate-900 text-xs">${selectedUser.name}</div>
+                  <div class="text-[11px] text-slate-500">${selectedUser.email} | ${selectedUser.phone}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          stepElement.innerHTML = `
+            <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+              <span>Cấp duyệt ${currentStepNumber}</span>
+              <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div class="pl-2 border-l-2 border-slate-200 space-y-1.5">
+              <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                <span>⚡ Hình thức: <b>Tự động duyệt</b></span>
+                <button onclick="openApproverModal(${currentStepNumber}, '${currentBlockId}')" class="text-slate-400 hover:text-blue-600" title="Chỉnh sửa">✏️</button>
+                <button onclick="removeApprover(this)" class="text-slate-400 hover:text-red-600" title="Xóa người duyệt">🗑️</button>
+              </div>
+              <div class="flex items-center gap-2.5 p-2 bg-blue-50/50 border border-blue-100 rounded-lg text-blue-800">
+                <span class="text-sm">⚡</span>
+                <div class="text-xs font-semibold">Tự động duyệt qua cấp này và chuyển tiếp</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      closeApproverModal();
+    }
+
+    // Thêm một cấp duyệt mới
+    function addNewApprovalStep(blockId) {
+      const container = document.getElementById(`steps-container-${blockId}`);
+      const currentCount = container.querySelectorAll('.step-item').length;
+      const nextStepNum = currentCount + 1;
+
+      const newStepDiv = document.createElement('div');
+      newStepDiv.className = 'border border-slate-200 rounded-xl p-3.5 bg-white space-y-3 step-item transition';
+      newStepDiv.id = `step-${blockId}-${nextStepNum}`;
+      newStepDiv.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+          <span>Cấp duyệt ${nextStepNum}</span>
+          <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <div class="pt-1 flex items-center justify-between">
+          <button onclick="openApproverModal(${nextStepNum}, '${blockId}')" class="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-blue-600 font-semibold text-xs inline-flex items-center gap-1.5 transition shadow-2xs">
+            <span>+</span> Thêm người duyệt
+          </button>
+          <span class="text-[11px] text-amber-600 font-medium">⚠️ Chưa thiết lập người duyệt</span>
+        </div>
+      `;
+      container.appendChild(newStepDiv);
+    }
+
+    // Xóa cấp duyệt
+    function removeStep(btn) {
+      const stepDiv = btn.closest('.step-item');
+      if (stepDiv) {
+        stepDiv.remove();
+      }
+    }
+
+    // Xóa người duyệt trong cấp duyệt để quay về trạng thái chưa gán
+    function removeApprover(btn) {
+      const stepDiv = btn.closest('.step-item');
+      const stepTitle = stepDiv.querySelector('span').innerText;
+      const stepNumMatch = stepTitle.match(/\d+/);
+      const stepNum = stepNumMatch ? stepNumMatch[0] : 1;
+
+      stepDiv.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-bold text-slate-800">
+          <span>${stepTitle}</span>
+          <button onclick="removeStep(this)" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        <div class="pt-1 flex items-center justify-between">
+          <button onclick="openApproverModal(${stepNum}, '${currentBlockId}')" class="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-blue-600 font-semibold text-xs inline-flex items-center gap-1.5 transition shadow-2xs">
+            <span>+</span> Thêm người duyệt
+          </button>
+          <span class="text-[11px] text-amber-600 font-medium">⚠️ Chưa thiết lập người duyệt</span>
+        </div>
+      `;
+    }
+
+    // ==================== QUẢN LÝ GỬI THÔNG BÁO (THEO ẢNH 1 & ẢNH 2 USER GỬI) ====================
+    // Danh sách nhân sự nội bộ dùng cho gợi ý người nhận thông báo
+    const internalStaffList = [
+      { name: 'NGUYỄN ANH TUẤN', email: 'tuan.a.nguyen@vntrip.vn', phone: '0998123456' },
+      { name: 'HOÀNG TRUNG HÀ', email: 'ha.t.trung@vntrip.vn', phone: '0983xxxxxx' },
+      { name: 'NGUYỄN THỊ MAI', email: 'mai.th.nguyen@vntrip.vn', phone: '0912xxxxxx' },
+      { name: 'MAI THỊ LAN', email: 'lan.t.mai@vntrip.vn', phone: '0904xxxxxx' },
+      { name: 'Đinh Duy Thành', email: 'thanh.d.dinh@vntrip.vn', phone: '0936702996' }
+    ];
+
+    // Bật/tắt popover chọn sự kiện thông báo (Khớp 100% Ảnh 1)
+    function toggleNotificationPopover(blockId) {
+      const popover = document.getElementById(`popover-${blockId}`);
+      if (!popover) return;
+
+      ['block1', 'block2', 'block3'].forEach(id => {
+        if (id !== blockId) {
+          const p = document.getElementById(`popover-${id}`);
+          if (p) p.classList.add('hidden');
+        }
+      });
+      popover.classList.toggle('hidden');
+    }
+
+    function closeNotificationPopover(blockId) {
+      const popover = document.getElementById(`popover-${blockId}`);
+      if (popover) popover.classList.add('hidden');
+    }
+
+    // Xác nhận thêm sự kiện thông báo (Tạo card khớp 100% Ảnh 2: chỉ duy nhất 'Gửi người nhận được chỉ định')
+    function confirmAddNotifications(blockId) {
+      const popover = document.getElementById(`popover-${blockId}`);
+      const container = document.getElementById(`notifications-container-${blockId}`);
+      const checkboxes = popover.querySelectorAll('input[type="checkbox"]:checked');
+
+      if (checkboxes.length === 0) {
+        alert('Vui lòng chọn ít nhất một sự kiện thông báo!');
+        return;
+      }
+
+      checkboxes.forEach(cb => {
+        const eventName = cb.value;
+        const existing = Array.from(container.querySelectorAll('.notif-title')).find(el => el.innerText.trim() === eventName);
+        if (!existing) {
+          const card = document.createElement('div');
+          card.className = 'border border-slate-200 rounded-xl bg-white p-3.5 space-y-3 transition notif-card shadow-2xs';
+          card.innerHTML = `
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <span class="font-bold text-xs text-slate-900 notif-title">${eventName}</span>
+              <button type="button" onclick="removeNotificationCard(this)" class="text-slate-400 hover:text-slate-600 text-sm font-bold leading-none p-1" title="Xóa thông báo này">✕</button>
+            </div>
+            <div class="space-y-2 pt-0.5">
+              <div class="relative">
+                <input type="text" placeholder="Tìm kiếm theo tên, email, số điện thoại" class="w-full pl-3.5 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 notif-search-input" onfocus="showNotifUserDropdown(this)" oninput="filterNotifUserDropdown(this)">
+                <span class="absolute right-3 top-2.5 text-slate-400 text-xs pointer-events-none">🔍</span>
+                <div class="notif-user-dropdown absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-20 hidden max-h-44 overflow-y-auto divide-y divide-slate-100"></div>
+              </div>
+              <div class="selected-recipients flex flex-wrap gap-2 pt-0.5"></div>
+            </div>
+          `;
+          container.appendChild(card);
+        }
+        cb.checked = false;
+      });
+
+      closeNotificationPopover(blockId);
+    }
+
+    function removeNotificationCard(btn) {
+      const card = btn.closest('.notif-card');
+      if (card) card.remove();
+    }
+
+    // Hiển thị dropdown gợi ý người nhận thông báo khi click vào input
+    function showNotifUserDropdown(input) {
+      const dropdown = input.parentElement.querySelector('.notif-user-dropdown');
+      if (!dropdown) return;
+
+      renderNotifUserDropdown(dropdown, internalStaffList, input);
+      dropdown.classList.remove('hidden');
+    }
+
+    // Lọc người nhận thông báo
+    function filterNotifUserDropdown(input) {
+      const dropdown = input.parentElement.querySelector('.notif-user-dropdown');
+      if (!dropdown) return;
+
+      const q = input.value.toLowerCase().trim();
+      const filtered = internalStaffList.filter(u => 
+        u.name.toLowerCase().includes(q) || 
+        u.email.toLowerCase().includes(q) || 
+        u.phone.toLowerCase().includes(q)
+      );
+
+      renderNotifUserDropdown(dropdown, filtered, input);
+      dropdown.classList.remove('hidden');
+    }
+
+    function renderNotifUserDropdown(dropdown, list, input) {
+      if (list.length === 0) {
+        dropdown.innerHTML = `<div class="p-2.5 text-center text-slate-400 text-xs">Không tìm thấy nhân sự phù hợp</div>`;
+        return;
+      }
+
+      dropdown.innerHTML = list.map(u => `
+        <div onclick="addRecipientToNotif(this, '${u.name}', '${u.email}', '${u.phone}')" class="p-2.5 hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs transition">
+          <div>
+            <div class="font-bold text-slate-800">${u.name}</div>
+            <div class="text-[11px] text-slate-400">${u.email} | ${u.phone}</div>
+          </div>
+          <span class="text-blue-600 font-bold text-sm">+</span>
+        </div>
+      `).join('');
+    }
+
+    function addRecipientToNotif(itemEl, name, email, phone) {
+      const card = itemEl.closest('.notif-card');
+      const recipientsContainer = card.querySelector('.selected-recipients');
+      const input = card.querySelector('.notif-search-input');
+      const dropdown = card.querySelector('.notif-user-dropdown');
+
+      // Kiểm tra trùng lặp
+      const exists = Array.from(recipientsContainer.querySelectorAll('span')).some(s => s.innerText.includes(email));
+      if (!exists) {
+        const chip = document.createElement('span');
+        chip.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 text-xs font-medium';
+        chip.innerHTML = `
+          <span>👤 ${name} (${email} | ${phone})</span>
+          <button type="button" onclick="this.parentElement.remove()" class="text-blue-400 hover:text-blue-700 font-bold ml-1">×</button>
+        `;
+        recipientsContainer.appendChild(chip);
+      }
+
+      input.value = '';
+      dropdown.classList.add('hidden');
+    }
+
+    // Đóng modal khi click ra ngoài backdrop
+    document.getElementById('approver-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeApproverModal();
+      }
+    });
+
+    // Đóng dropdown settings & popovers khi click ra ngoài
+    document.addEventListener('click', function(e) {
+      // Đóng dropdown Settings
+      const settingsGroup = document.querySelector('.group');
+      const settingsMenu = document.getElementById('settings-menu-dropdown');
+      if (settingsGroup && !settingsGroup.contains(e.target)) {
+        if (settingsMenu) settingsMenu.classList.add('hidden');
+      }
+
+      // Đóng popover thông báo nếu click bên ngoài
+      ['block1', 'block2', 'block3'].forEach(id => {
+        const pop = document.getElementById(`popover-${id}`);
+        const btn = document.querySelector(`button[onclick*="toggleNotificationPopover('${id}')"]`);
+        if (pop && !pop.classList.contains('hidden')) {
+          if (!pop.contains(e.target) && (!btn || !btn.contains(e.target))) {
+            pop.classList.add('hidden');
+          }
+        }
+      });
+
+      // Đóng gợi ý người nhận thông báo
+      document.querySelectorAll('.notif-user-dropdown').forEach(dd => {
+        if (!dd.contains(e.target) && !e.target.classList.contains('notif-search-input')) {
+          dd.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
